@@ -7,9 +7,9 @@ Materia: Taller de Sistemas Operativos
 
 Integrantes:
 
-Dominguez Jasso Julieta
-Juarez Morales Miguel Angel
-Reyna Bello Eduardo Rodrigo
+** Dominguez Jasso Julieta
+** Juarez Morales Miguel Angel
+** Reyna Bello Eduardo Rodrigo
 
 Profesor:
 Gustavo Moises Romero Gonzalez
