@@ -1,43 +1,44 @@
--Tecnológico de Estudios Superiores del Oriente del Estado de México-
-
-Reporte Técnico: Configuración de NGINX y PHP-FPM en AlmaLinux 9
+Tecnológico de Estudios Superiores del Oriente del Estado de México
+Reporte Técnico
+Configuración de NGINX y PHP-FPM en AlmaLinux 9
 
 Carrera: Ingeniería en Sistemas Computacionales
 Materia: Taller de Sistemas Operativos
 
-Integrantes * * *  Dominguez Jasso Julieta
-            * * * Juarez Morales Miguel Angel
-Profesor
+Integrantes:
 
+Dominguez Jasso Julieta
+Juarez Morales Miguel Angel
+
+Profesor:
 Gustavo Moises Romero Gonzalez
 
-Fecha
-
+Fecha:
 Mayo 2026
 
 1. Introducción
 
-Actualmente los servidores web requieren configuraciones optimizadas que permitan un mejor rendimiento y mayor control sobre los servicios utilizados. Por esta razón, en este proyecto se realizó la compilación manual de NGINX y PHP 8.4 sobre AlmaLinux 9.
+Actualmente los servidores web requieren configuraciones más eficientes para mejorar el rendimiento y el control de los servicios utilizados. Por ello, en esta práctica se realizó la compilación manual de NGINX y PHP 8.4 en AlmaLinux 9.
 
-La implementación se enfocó en crear un entorno estable utilizando PHP-FPM y comunicación mediante sockets UNIX, evitando el uso de conexiones TCP internas y mejorando la eficiencia entre procesos.
+La implementación se enfocó en utilizar PHP-FPM junto con comunicación mediante Sockets UNIX, permitiendo una conexión más rápida entre procesos y evitando conexiones TCP innecesarias.
 
-Además, se configuró el inicio automático de servicios utilizando SystemD y se resolvieron problemas relacionados con SELinux durante la ejecución del sistema.
+Además, se configuró el inicio automático de servicios con SystemD y se resolvieron problemas relacionados con SELinux durante la ejecución del entorno.
 
 2. Objetivo General
 
-Implementar un entorno web funcional y optimizado mediante la compilación de NGINX y PHP-FPM en AlmaLinux 9.
+Implementar un entorno web funcional y optimizado utilizando NGINX y PHP-FPM en AlmaLinux 9.
 
 3. Objetivos Específicos
-Instalar las dependencias necesarias para la compilación.
-Configurar NGINX como servidor web principal.
-Compilar PHP 8.4 con soporte para PHP-FPM.
-Implementar comunicación FastCGI mediante sockets UNIX.
-Automatizar los servicios utilizando SystemD.
-Resolver errores relacionados con permisos y SELinux.
+Instalar dependencias necesarias para la compilación.
+Configurar NGINX como servidor web.
+Compilar PHP 8.4 con soporte PHP-FPM.
+Implementar comunicación FastCGI mediante Sockets UNIX.
+Automatizar servicios utilizando SystemD.
+Resolver problemas relacionados con SELinux.
 4. Desarrollo
 4.1 Instalación de Dependencias
 
-Primero se actualizó el sistema y se instalaron las librerías necesarias para evitar errores durante la compilación.
+Primero se actualizó el sistema y se instalaron librerías necesarias para evitar errores durante la compilación.
 
 sudo dnf update -y
 
@@ -58,7 +59,7 @@ sudo useradd -g nginx -s /sbin/nologin -r nginx
 sudo useradd -g nginx -s /sbin/nologin -r php
 4.3 Compilación de NGINX
 
-Se descargó el código fuente oficial de NGINX y posteriormente se compiló.
+Se descargó y compiló el código fuente oficial de NGINX.
 
 cd /usr/src
 
@@ -67,24 +68,20 @@ sudo wget http://nginx.org/download/nginx-1.26.0.tar.gz
 sudo tar -xzvf nginx-1.26.0.tar.gz
 
 cd nginx-1.26.0
-
-Configuración:
-
+Configuración
 sudo ./configure \
 --prefix=/srv/nginx \
 --user=nginx \
 --group=nginx \
 --with-http_ssl_module \
 --with-http_v2_module
-
-Instalación:
-
+Instalación
 sudo make
 
 sudo make install
 4.4 Compilación de PHP 8.4
 
-Posteriormente se descargó PHP con soporte para PHP-FPM y extensiones adicionales.
+Posteriormente se descargó PHP con soporte para PHP-FPM.
 
 cd /usr/src
 
@@ -93,35 +90,25 @@ sudo wget https://www.php.net/distributions/php-8.4.1.tar.gz
 sudo tar -xzvf php-8.4.1.tar.gz
 
 cd php-8.4.1
-
-Configuración:
-
+Configuración
 sudo ./configure \
 --prefix=/srv/nginx \
 --enable-fpm \
 --with-fpm-user=php \
 --with-fpm-group=nginx \
 --enable-gd \
---with-jpeg \
---with-webp \
---with-freetype \
---enable-intl \
 --enable-mbstring
-
-Compilación:
-
+Compilación
 sudo make -j4
 
 sudo make install
 4.5 Configuración de PHP-FPM
 
-Se configuró el pool principal para utilizar un socket UNIX.
-
-Archivo:
+Archivo utilizado:
 
 /srv/nginx/etc/php-fpm.d/www.conf
 
-Configuración:
+Configuración aplicada:
 
 listen = /tmp/php84.sock
 listen.owner = php
@@ -129,7 +116,7 @@ listen.group = nginx
 listen.mode = 0660
 4.6 Configuración de NGINX
 
-En el archivo principal de NGINX se agregó la comunicación FastCGI.
+Se agregó la comunicación FastCGI en el archivo principal de configuración.
 
 location ~ \.php$ {
 
@@ -143,7 +130,7 @@ location ~ \.php$ {
 }
 4.7 Configuración de Servicios
 
-Se habilitaron los servicios para iniciar automáticamente con el sistema.
+Se habilitaron los servicios para iniciar automáticamente.
 
 sudo systemctl daemon-reload
 
@@ -162,7 +149,9 @@ status=203/EXEC
 
 El problema fue causado por restricciones de SELinux.
 
-Para solucionarlo se modificó el archivo:
+Solución
+
+Archivo modificado:
 
 /etc/selinux/config
 
@@ -175,21 +164,21 @@ Después de realizar la configuración:
 
 NGINX respondió correctamente a peticiones HTTP.
 PHP-FPM procesó archivos PHP sin errores.
-La comunicación mediante sockets UNIX funcionó correctamente.
+La comunicación mediante Sockets UNIX funcionó correctamente.
 Los servicios iniciaron automáticamente después del reinicio del sistema.
 6. Conclusiones
 
-La compilación manual de NGINX y PHP-FPM permitió crear un entorno web más optimizado y personalizado en comparación con instalaciones tradicionales.
+La compilación manual de NGINX y PHP-FPM permitió crear un entorno web más optimizado y personalizado.
 
-El uso de sockets UNIX mejoró la comunicación entre procesos y redujo la sobrecarga interna del sistema. Además, el proyecto permitió comprender la administración de servicios en Linux y la importancia de SELinux en sistemas empresariales.
+El uso de Sockets UNIX ayudó a mejorar la comunicación entre procesos y reducir la sobrecarga interna del sistema. Además, esta práctica permitió comprender mejor la administración de servicios Linux y la importancia de SELinux en sistemas empresariales.
 
 7. Bibliografía
 
-AlmaLinux OS Foundation. (2025). AlmaLinux Documentation.
+AlmaLinux Documentation
 https://docs.almalinux.org/
 
-NGINX. (2026). NGINX Documentation.
+NGINX Documentation
 https://nginx.org/en/docs/
 
-PHP Group. (2026). PHP-FPM Manual.
+PHP Manual
 https://www.php.net/manual/en/install.fpm.php
