@@ -1,8 +1,9 @@
-Tecnológico de Estudios Superiores del Oriente del Estado de México (TESOEM)
+-Tecnológico de Estudios Superiores del Oriente del Estado de México-
+
 Reporte Técnico: Configuración de NGINX y PHP-FPM en AlmaLinux 9
 
 Carrera: Ingeniería en Sistemas Computacionales
-Materia: Administración de Servidores
+Materia: Taller de Sistemas Operativos
 
 Integrantes * * *  Dominguez Jasso Julieta
             * * * Juarez Morales Miguel Angel
